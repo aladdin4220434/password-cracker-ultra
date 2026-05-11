@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  attack-node-1:
+    build: .
+    container_name: attack-node-1
+    environment:
+      - NODE_ID=1
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 64G
+        reservations:
+          cpus: '4'
+          memory: 32G
+    networks:
+      - attack-network
+
+  attack-node-2:
+    build: .
+    container_name: attack-node-2
+    environment:
+      - NODE_ID=2
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 64G
+    networks:
+      - attack-network
+
+  load-balancer:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - attack-node-1
+      - attack-node-2
+    networks:
+      - attack-network
+
+networks:
+  attack-network:
+    driver: bridge
