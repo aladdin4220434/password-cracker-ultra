@@ -1,371 +1,171 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html dir="rtl" lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Cracker Ultra - نظام اختراق فائق السرعة</title>
+    <title>Password Cracker Ultra</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Cairo', 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
-        }
-
-        .container {
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-
-        /* Header */
-        .header {
-            text-align: center;
             color: white;
-            margin-bottom: 30px;
         }
-
-        .header h1 {
-            font-size: 2.5rem;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* Cards */
-        .card {
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
             background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
             border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 25px;
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: transform 0.3s;
+            padding: 30px;
+            backdrop-filter: blur(10px);
         }
-
-        .card:hover {
-            transform: translateY(-5px);
+        h1 { text-align: center; margin-bottom: 30px; }
+        input, button {
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: none;
+            width: 100%;
+            font-size: 16px;
+            box-sizing: border-box;
         }
-
-        .card h3 {
-            color: #a0aec0;
-            margin-bottom: 20px;
-            font-size: 1.2rem;
+        button {
+            background: #48bb78;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
         }
-
-        /* System Stats */
-        .system-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        button:hover { background: #38a169; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .form-row {
+            display: flex;
             gap: 15px;
         }
-
+        .form-row input { width: 50%; }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
         .stat-card {
             background: rgba(0,0,0,0.3);
             padding: 15px;
-            border-radius: 15px;
+            border-radius: 10px;
             text-align: center;
         }
-
-        .stat-value {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #48bb78;
-        }
-
-        .stat-label {
-            font-size: 0.85rem;
-            color: #a0aec0;
-            margin-top: 5px;
-        }
-
-        /* Speed Meter */
-        .speed-meter {
-            background: rgba(0,0,0,0.3);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .speed-number {
-            font-size: 4rem;
-            font-weight: bold;
-            color: #fbbf24;
-            text-shadow: 0 0 20px #fbbf24;
-            animation: pulse 1s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { text-shadow: 0 0 10px #fbbf24; }
-            50% { text-shadow: 0 0 30px #fbbf24; }
-        }
-
-        /* Progress Bar */
-        .progress-bar-container {
+        .stat-value { font-size: 24px; font-weight: bold; color: #fbbf24; }
+        .progress-bar {
             background: rgba(255,255,255,0.2);
             border-radius: 10px;
+            height: 20px;
             overflow: hidden;
-            height: 30px;
         }
-
-        .progress-bar {
-            background: linear-gradient(90deg, #48bb78, #38a169);
+        .progress-fill {
+            background: #48bb78;
             width: 0%;
             height: 100%;
             transition: width 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
         }
-
-        /* Buttons */
-        .btn {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: inherit;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #f56565, #c53030);
-            color: white;
-        }
-
-        .btn-primary:hover, .btn-danger:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-        }
-
-        /* Inputs */
-        .input-field {
-            width: 100%;
-            padding: 12px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 10px;
-            color: white;
-            font-size: 1rem;
-        }
-
-        .input-field:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        /* Grid */
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin: 15px 0;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        /* Logs */
-        .logs-container {
+        .logs {
             background: rgba(0,0,0,0.5);
             border-radius: 10px;
-            height: 200px;
+            height: 150px;
             overflow-y: auto;
-            padding: 15px;
+            padding: 10px;
             font-family: monospace;
-            font-size: 0.85rem;
+            font-size: 12px;
+            margin-top: 20px;
         }
-
-        .log-entry {
-            padding: 5px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .log-entry.success { color: #48bb78; }
-        .log-entry.error { color: #f56565; }
-        .log-entry.info { color: #4299e1; }
-        .log-entry.warning { color: #ed8936; }
-
-        @media (max-width: 768px) {
-            .form-row { grid-template-columns: 1fr; }
-            .system-grid { grid-template-columns: repeat(2, 1fr); }
-            .speed-number { font-size: 2rem; }
-        }
+        .log-entry { padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .log-success { color: #48bb78; }
+        .log-error { color: #f56565; }
+        .log-info { color: #4299e1; }
+        .button-group { display: flex; gap: 15px; }
+        .btn-stop { background: #f56565; }
+        .btn-stop:hover { background: #c53030; }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>🚀 Password Cracker Ultra</h1>
-            <p>نظام اختراق فائق السرعة - 10,000+ طلب/ثانية</p>
-        </div>
-
-        <!-- System Info -->
-        <div class="card">
-            <h3>🖥️ معلومات النظام الفائقة</h3>
-            <div class="system-grid" id="systemStats">
-                <div class="stat-card"><div class="stat-value" id="cpuUsage">0%</div><div class="stat-label">CPU</div></div>
-                <div class="stat-card"><div class="stat-value" id="ramUsage">0GB</div><div class="stat-label">RAM المستخدمة</div></div>
-                <div class="stat-card"><div class="stat-value" id="threadsCount">0</div><div class="stat-label">Threads نشطة</div></div>
-                <div class="stat-card"><div class="stat-value" id="speedMeter">0</div><div class="stat-label">🚀 السرعة الحالية</div></div>
+        <h1>🚀 Password Cracker Ultra</h1>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value" id="cpuUsage">-</div>
+                <div>CPU Usage</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="ramUsage">-</div>
+                <div>RAM Usage</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="speedValue">0</div>
+                <div>🚀 Speed (req/s)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="checkedValue">0</div>
+                <div>Checked</div>
             </div>
         </div>
-
-        <!-- Speed Dashboard -->
-        <div class="card">
-            <div class="speed-meter">
-                <div class="speed-number" id="bigSpeed">0</div>
-                <div class="stat-label">طلب/ثانية - السرعة اللحظية</div>
-                <div class="progress-bar-container" style="margin-top: 20px;">
-                    <div class="progress-bar" id="speedProgressBar" style="width: 0%; background: linear-gradient(90deg, #fbbf24, #f59e0b);"></div>
-                </div>
-            </div>
+        
+        <input type="text" id="studentId" placeholder="رقم الطالب" value="4220434">
+        
+        <div class="form-row">
+            <input type="number" id="startRange" placeholder="بداية" value="100000">
+            <input type="number" id="endRange" placeholder="نهاية" value="109999">
         </div>
-
-        <!-- Control Panel -->
-        <div class="card">
-            <h3>🎮 لوحة التحكم</h3>
-            <div class="form-group">
-                <label style="color:white">📌 رقم الطالب</label>
-                <input type="text" id="studentId" placeholder="أدخل رقم الطالب" class="input-field">
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label style="color:white">🔢 بداية النطاق</label>
-                    <input type="number" id="startRange" value="100000" class="input-field">
-                </div>
-                <div class="form-group">
-                    <label style="color:white">🔢 نهاية النطاق</label>
-                    <input type="number" id="endRange" value="109999" class="input-field">
-                </div>
-            </div>
-            <div class="button-group">
-                <button id="startBtn" class="btn btn-primary">🚀 بدء الهجوم</button>
-                <button id="stopBtn" class="btn btn-danger" disabled>⏹️ إيقاف</button>
-            </div>
+        
+        <div class="button-group">
+            <button id="startBtn">▶ بدء الهجوم</button>
+            <button id="stopBtn" class="btn-stop" disabled>⏹ إيقاف</button>
         </div>
-
-        <!-- Progress -->
-        <div class="card" id="progressCard" style="display: none;">
-            <h3>📊 تقدم الهجوم</h3>
-            <div class="progress-bar-container">
-                <div class="progress-bar" id="progressBar"></div>
-            </div>
-            <div class="system-grid" style="margin-top: 15px;">
-                <div class="stat-card"><div class="stat-value" id="checkedCount">0</div><div class="stat-label">تم الفحص</div></div>
-                <div class="stat-card"><div class="stat-value" id="remainingCount">0</div><div class="stat-label">متبقي</div></div>
-                <div class="stat-card"><div class="stat-value" id="avgSpeed">0</div><div class="stat-label">متوسط السرعة</div></div>
-                <div class="stat-card"><div class="stat-value" id="etaTime">0</div><div class="stat-label">الوقت المتبقي</div></div>
-            </div>
+        
+        <div class="progress-bar" style="margin: 20px 0;">
+            <div class="progress-fill" id="progressFill"></div>
         </div>
-
-        <!-- Results -->
-        <div class="card" id="resultCard" style="display: none; background: linear-gradient(135deg, #48bb78, #38a169);">
-            <div style="text-align: center">
-                <div style="font-size: 4rem;">🎉</div>
-                <h2>تم العثور على كلمة السر!</h2>
-                <div style="font-size: 2rem; font-family: monospace; margin: 15px 0;" id="foundPassword"></div>
-                <div id="foundLocation" style="opacity: 0.8;"></div>
-            </div>
-        </div>
-
-        <!-- Logs -->
-        <div class="card">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-                <h3>📋 سجل الأحداث</h3>
-                <button id="clearLogsBtn" class="btn" style="background: rgba(255,255,255,0.2); color:white; padding: 5px 15px;">مسح</button>
-            </div>
-            <div class="logs-container" id="logsContainer">
-                <div class="log-entry info">✨ النظام فائق السرعة جاهز. 10,000+ req/s ممكنة!</div>
-            </div>
+        
+        <div class="logs" id="logs">
+            <div class="log-entry log-info">✨ النظام جاهز. أدخل رقم الطالب وابدأ البحث.</div>
         </div>
     </div>
-
+    
     <script>
-        let statusInterval = null;
-        let systemInterval = null;
-
-        function addLog(message, type = 'info') {
-            const logs = document.getElementById('logsContainer');
-            const entry = document.createElement('div');
-            entry.className = `log-entry ${type}`;
-            entry.innerHTML = `[${new Date().toLocaleTimeString()}] ${message}`;
-            logs.appendChild(entry);
+        let interval = null;
+        
+        function addLog(msg, type='info') {
+            const logs = document.getElementById('logs');
+            const div = document.createElement('div');
+            div.className = `log-entry log-${type}`;
+            div.innerHTML = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            logs.appendChild(div);
             logs.scrollTop = logs.scrollHeight;
         }
-
-        async function updateSystem() {
-            try {
-                const res = await fetch('/api/system');
-                const data = await res.json();
-                document.getElementById('cpuUsage').innerHTML = `${data.cpu.usage}%`;
-                document.getElementById('ramUsage').innerHTML = `${(data.memory.used / 1e9).toFixed(1)}GB`;
-                document.getElementById('threadsCount').innerHTML = data.performance?.max_threads || '5000';
-            } catch(e) {}
-        }
-
+        
         async function updateStatus() {
             try {
                 const res = await fetch('/api/status');
                 const data = await res.json();
-                
-                document.getElementById('bigSpeed').innerHTML = data.instant_speed || data.speed || 0;
-                document.getElementById('speedMeter').innerHTML = `${data.speed || 0}/s`;
-                
-                const speedPercent = Math.min((data.speed / 10000) * 100, 100);
-                document.getElementById('speedProgressBar').style.width = `${speedPercent}%`;
-                
-                if (data.active) {
-                    document.getElementById('progressCard').style.display = 'block';
-                    document.getElementById('progressBar').style.width = `${data.progress}%`;
-                    document.getElementById('progressBar').innerHTML = `${Math.round(data.progress)}%`;
-                    document.getElementById('checkedCount').innerHTML = data.checked?.toLocaleString() || 0;
-                    document.getElementById('remainingCount').innerHTML = data.remaining?.toLocaleString() || 0;
-                    document.getElementById('avgSpeed').innerHTML = data.speed || 0;
-                    document.getElementById('etaTime').innerHTML = formatTime(data.eta);
-                }
+                document.getElementById('speedValue').innerText = data.speed || 0;
+                document.getElementById('checkedValue').innerText = data.checked || 0;
+                document.getElementById('progressFill').style.width = `${data.progress || 0}%`;
                 
                 if (data.found) {
-                    document.getElementById('resultCard').style.display = 'block';
-                    document.getElementById('foundPassword').innerHTML = data.found_password;
-                    document.getElementById('foundLocation').innerHTML = `📍 ${data.found_location || 'تم التحويل'}`;
                     addLog(`🎉 تم العثور على كلمة السر: ${data.found_password}`, 'success');
-                    stopSearch();
-                }
-                
-                if (!data.active && data.checked > 0 && !data.found) {
-                    addLog('⚠️ اكتمل البحث دون العثور على كلمة السر', 'warning');
                     stopSearch();
                 }
             } catch(e) {}
         }
-
-        function formatTime(sec) {
-            if (!sec) return '0:00';
-            const h = Math.floor(sec / 3600);
-            const m = Math.floor((sec % 3600) / 60);
-            const s = sec % 60;
-            return h > 0 ? `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}` : `${m}:${s.toString().padStart(2,'0')}`;
+        
+        async function updateSystem() {
+            try {
+                const res = await fetch('/api/system');
+                const data = await res.json();
+                document.getElementById('cpuUsage').innerText = `${data.cpu.usage}%`;
+                document.getElementById('ramUsage').innerText = `${(data.memory.used / 1e9).toFixed(1)}GB`;
+            } catch(e) {}
         }
-
+        
         async function startSearch() {
             const studentId = document.getElementById('studentId').value;
             const startRange = document.getElementById('startRange').value;
@@ -376,43 +176,44 @@
                 return;
             }
             
-            addLog(`🚀 بدء هجوم فائق السرعة على رقم الطالب: ${studentId}`);
+            addLog(`🚀 بدء الهجوم على رقم الطالب: ${studentId}`);
             
             const res = await fetch('/api/start', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({student_id: studentId, start_range: parseInt(startRange), end_range: parseInt(endRange)})
+                body: JSON.stringify({
+                    student_id: studentId,
+                    start_range: parseInt(startRange),
+                    end_range: parseInt(endRange)
+                })
             });
             const data = await res.json();
             
             if (data.status === 'started') {
-                addLog(`✅ تم الإطلاق! الوضع: ${data.mode} - ${data.concurrent} طلب متزامن`, 'success');
+                addLog(`✅ بدأ الهجوم - الوضع: ${data.mode}`, 'success');
                 document.getElementById('startBtn').disabled = true;
                 document.getElementById('stopBtn').disabled = false;
-                if (statusInterval) clearInterval(statusInterval);
-                statusInterval = setInterval(updateStatus, 200);
-                setInterval(updateSystem, 1000);
+                if (interval) clearInterval(interval);
+                interval = setInterval(updateStatus, 500);
+            } else {
+                addLog(`❌ ${data.error}`, 'error');
             }
         }
-
+        
         async function stopSearch() {
-            addLog('⏹️ إيقاف الهجوم...', 'warning');
+            addLog('⏹ إيقاف الهجوم...', 'info');
             await fetch('/api/stop', {method: 'POST'});
             document.getElementById('startBtn').disabled = false;
             document.getElementById('stopBtn').disabled = true;
-            if (statusInterval) clearInterval(statusInterval);
+            if (interval) clearInterval(interval);
         }
-
-        function clearLogs() {
-            document.getElementById('logsContainer').innerHTML = '<div class="log-entry info">✨ تم مسح السجل</div>';
-        }
-
+        
         document.getElementById('startBtn').onclick = startSearch;
         document.getElementById('stopBtn').onclick = stopSearch;
-        document.getElementById('clearLogsBtn').onclick = clearLogs;
+        
         updateSystem();
         setInterval(updateSystem, 2000);
-        addLog('✨ النظام فائق السرعة جاهز! السرعة القصوى المتوقعة: 10,000+ req/s', 'info');
+        addLog('✅ النظام جاهز!', 'success');
     </script>
 </body>
 </html>
