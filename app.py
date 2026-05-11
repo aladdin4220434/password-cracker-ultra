@@ -188,8 +188,12 @@ def get_status():
         'elapsed': int(elapsed),
         'eta': int(remaining / search_speed) if search_speed > 0 else 0
     })
+@app.route('/health')
+def health():
+    return jsonify({
+        "status": "ok"
+    }), 200
 
 if __name__ == '__main__':
-    # إعدادات الأداء لـ Flask
     port = int(os.environ.get('PORT', 8080))
     app.run(host='0.0.0.0', port=port, debug=False, threaded=True)
